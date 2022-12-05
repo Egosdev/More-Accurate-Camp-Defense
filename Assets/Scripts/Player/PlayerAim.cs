@@ -99,6 +99,15 @@ public class PlayerAim : MonoBehaviour
             lineRenderer.SetPosition(0, bulletTraceVector);
         }
 
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            LightManager.Instance.TurnAllLights(true);
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            LightManager.Instance.TurnAllLights(false);
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(Reloading());
@@ -123,7 +132,7 @@ public class PlayerAim : MonoBehaviour
         Vector3 aimDir = (calculatedMousePos - transform.position).normalized;
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
         aimTransform.eulerAngles = new Vector3(0, 0, angle);
-        //flashlightTransform.eulerAngles = new Vector3(0, 0, angle);
+        flashlightTransform.eulerAngles = new Vector3(0, 0, angle - 90);
 
         Vector3 localScale = Vector3.one;
         if (angle > 90 || angle < -90)
@@ -135,7 +144,6 @@ public class PlayerAim : MonoBehaviour
             localScale.y = +1f;
         }
         aimTransform.localScale = localScale;
-        //flashlightTransform.localScale = Vector3.one;
     }
     private Vector3 CalculateMousePos()
     {

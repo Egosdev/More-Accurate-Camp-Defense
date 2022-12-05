@@ -183,6 +183,7 @@ public class DayActionsManager : MonoBehaviour
         if (waitingAnswerPaperList.Count == 0)
         {
             GameStateManager.Instance.CurrentGameState = GameStateManager.GameState.FreeRoam;
+            LightManager.Instance.TurnAllLights(false);
             WaveManager.Instance.waveText.text = "Press 'F' To Next Wave";
             StartCoroutine(ChangeCanvas(false));
             SoundManager.Instance.PlaySound(CampManager.Instance.player.GetComponent<PlayerAim>().listener.GetComponent<AudioSource>(), SoundManager.Instance.dayTimeSFX);

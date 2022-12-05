@@ -47,7 +47,8 @@ public class WaveManager : MonoBehaviour
     //every wave only one but random fast spawner, just idea
     public void NextWave()
     {
-        Invoke("MakeNight", 1f);
+        //Invoke("MakeNight", 1f);
+        LightManager.Instance.TurnAllLights(true);
         SoundManager.Instance.PlaySound(CampManager.Instance.player.GetComponent<PlayerAim>().listener.GetComponent<AudioSource>(), SoundManager.Instance.waveStartSFX);
         _currentWave++;
         waveText.text = "Wave " + _currentWave.ToString();

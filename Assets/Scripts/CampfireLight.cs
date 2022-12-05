@@ -3,14 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-public class Campfire : MonoBehaviour
+public class CampfireLight : MonoBehaviour, LightManager.ILightSetter
 {
     [SerializeField] float rate;
     float timer;
     Vector3 target;
     float outerTarget;
+    [SerializeField] ParticleSystem fire;
+    [SerializeField] ParticleSystem spark;
+    float intensityTarget;
+    bool isBurning;
+
     private void Update()
     {
+        if(!isBurning)
+        {
+            GetComponent<Light2D>().intensity = Mathf.MoveTowards(GetComponent<Light2D>().intensity, intensityTarget, Time.deltaTime);
+            return;
+        }
+
         if (timer > 0)
         {
             timer -= Time.deltaTime;
@@ -25,6 +36,24 @@ public class Campfire : MonoBehaviour
             outerTarget = Random.Range(6f, 6.5f);
             GetComponent<Light2D>().pointLightOuterRadius = Mathf.MoveTowards(GetComponent<Light2D>().pointLightOuterRadius, outerTarget, Time.deltaTime * 25);
             GetComponent<Light2D>().intensity = Mathf.MoveTowards(GetComponent<Light2D>().intensity, Random.Range(0.5f, 2f), Time.deltaTime * 20);
+        }
+
+    }
+
+    public void SetLight(bool turnOn)
+    {
+        if(turnOn)
+        {
+            fire.Play();
+            spark.Play();
+            isBurning = true;
+        }
+        else
+        {
+            intensityTarget = 0;
+            fire.Stop();
+            spark.Stop();
+            isBurning = false;
         }
     }
 }
