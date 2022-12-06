@@ -4107,7 +4107,7 @@ GameObject:
   - component: {fileID: 880221217}
   m_Layer: 0
   m_Name: Light
-  m_TagString: Untagged
+  m_TagString: Light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4141,6 +4141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashlight: {fileID: 6074830461200257136}
+  circleLight: {fileID: 6074830461174941980}
 --- !u!1 &6074830461174941980
 GameObject:
   m_ObjectHideFlags: 0

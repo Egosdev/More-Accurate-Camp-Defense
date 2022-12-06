@@ -5,6 +5,7 @@ using UnityEngine;
 public class Flashlight : MonoBehaviour, LightManager.ILightSetter
 {
     [SerializeField] GameObject flashlight;
+    [SerializeField] GameObject circleLight;
 
     public void SetLight(bool turnOn)
     {
@@ -12,6 +13,7 @@ public class Flashlight : MonoBehaviour, LightManager.ILightSetter
             Invoke("OpenFlashlight", 0.5f);
         else
             flashlight.SetActive(false);
+        circleLight.SetActive(turnOn);
     }
 
     public void OpenFlashlight()

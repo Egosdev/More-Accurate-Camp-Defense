@@ -99,15 +99,6 @@ public class PlayerAim : MonoBehaviour
             lineRenderer.SetPosition(0, bulletTraceVector);
         }
 
-        if(Input.GetKeyDown(KeyCode.O))
-        {
-            LightManager.Instance.TurnAllLights(true);
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            LightManager.Instance.TurnAllLights(false);
-        }
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(Reloading());
