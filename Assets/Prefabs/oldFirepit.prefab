@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 5994442012915232095}
   - component: {fileID: 1737980174}
   m_Layer: 0
-  m_Name: Firepit
+  m_Name: oldFirepit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

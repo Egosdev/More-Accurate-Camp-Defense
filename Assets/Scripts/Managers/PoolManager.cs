@@ -25,4 +25,5 @@ public class PoolManager : MonoBehaviour
     public Transform corpsePoolTransform;
     public Transform NPCPoolTransform;
     public Transform materialPoolTransform;
+    public Transform bloodPoolTransform;
 }
