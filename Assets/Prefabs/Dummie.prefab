@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 956194129}
-  m_LocalRotation: {x: -0.11320323, y: -0, z: -0, w: 0.9935719}
+  m_LocalRotation: {x: -0.19080894, y: 0, z: 0, w: 0.9816273}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 2.3000002, z: 1}
   m_Children: []
   m_Father: {fileID: 1499710712418031554}
   m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: -13, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -22, y: 0, z: 0}
 --- !u!212 &956194132
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1071,6 +1071,7 @@ GameObject:
   - component: {fileID: 1499710711407247861}
   - component: {fileID: 1499710711407247867}
   - component: {fileID: 1499710711407247866}
+  - component: {fileID: 1134473982}
   m_Layer: 15
   m_Name: GFX
   m_TagString: Untagged
@@ -1160,6 +1161,25 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.25}
   serializedVersion: 2
   m_Radius: 0.25
+--- !u!95 &1134473982
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499710711407247860}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d85eda66e981a684ca4b0b45aa1bc63a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1499710711488120151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,6 +1559,11 @@ MonoBehaviour:
   maxHealth: 10000
   health: 10000
   isBarricade: 0
+  target: {r: 0, g: 0, b: 0, a: 0}
+  headshotColor: {r: 0.35686275, g: 0, b: 0, a: 1}
+  bloodFx: {fileID: 7908481389912759769, guid: 146ed82dcfefe524899d4e234967ceca, type: 3}
+  plane: {fileID: 956194130}
+  anim: {fileID: 1134473982}
 --- !u!114 &318740081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1546,10 +1571,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1499710712418031578}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23c3394c01ebdf5468b030a8ab9a7817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {r: 0, g: 0, b: 0, a: 0}
-  bloodFx: {fileID: 0}
+  headshotColor: {r: 0.3584906, g: 0, b: 0, a: 1}
+  bloodFx: {fileID: 7908481389912759769, guid: 146ed82dcfefe524899d4e234967ceca, type: 3}
+  plane: {fileID: 956194130}
+  anim: {fileID: 1134473982}

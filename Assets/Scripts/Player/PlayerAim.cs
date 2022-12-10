@@ -194,6 +194,7 @@ public class PlayerAim : MonoBehaviour
                     if (IsHeadShot())
                     {
                         hit.collider.gameObject.GetComponent<HealthSystem>().Damage(damageMultiplier + gunStatScript.damage * 2, direction, aimAnim.transform.eulerAngles.z, gameObject);
+                        hit.collider.gameObject.GetComponent<HealthSystem>().HeadshotFeel(aimAnim.transform.eulerAngles.z);
                         lineRenderer.SetPosition(1, hit.transform.position - gunStatScript.gunEndPointTransform.position + new Vector3(0, 0.85f, 0));
                         SoundManager.Instance.PlaySoundPitchRandomizer(hit.transform.GetComponent<EnemyBrain>().listener.GetComponent<AudioSource>(), SoundManager.Instance.GiveRandomClip(SoundManager.Instance.headShotSFX), 0.15f, 0.15f);
                     }

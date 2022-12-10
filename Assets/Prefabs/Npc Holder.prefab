@@ -2305,6 +2305,11 @@ MonoBehaviour:
   maxHealth: 100
   health: 100
   isBarricade: 0
+  target: {r: 0, g: 0, b: 0, a: 0}
+  headshotColor: {r: 0, g: 0, b: 0, a: 0}
+  bloodFx: {fileID: 7908481389912759769, guid: 146ed82dcfefe524899d4e234967ceca, type: 3}
+  plane: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!114 &7538704008873950872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2390,7 +2395,7 @@ MonoBehaviour:
   - {x: -0.5, y: 1, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -219600
+  m_InstanceId: 60054
 --- !u!1 &7538704008948317659
 GameObject:
   m_ObjectHideFlags: 0

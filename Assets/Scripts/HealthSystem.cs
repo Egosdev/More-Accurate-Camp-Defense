@@ -8,6 +8,12 @@ public class HealthSystem : MonoBehaviour
     public int health;
     [SerializeField] bool isBarricade;
     Barricade barricadeScript;
+    [Header("Shoot Feel")]
+    [SerializeField] Color target;
+    [SerializeField] Color headshotColor;
+    [SerializeField] Transform bloodFx;
+    [SerializeField] Transform plane;
+    [SerializeField] Animator anim;
 
     private void Start()
     {
@@ -16,9 +22,11 @@ public class HealthSystem : MonoBehaviour
         {
             barricadeScript = GetComponentInParent<Barricade>();
         }
+        else
+            target = GetComponentInChildren<SpriteRenderer>().color;
     }
 
-    public void DragDeadBody(GameObject deadBody,Vector3 dir, float angle)
+    public void DragDeadBody(GameObject deadBody, Vector3 dir, float angle)
     {
         deadBody.SetActive(true);
         deadBody.transform.eulerAngles = new Vector3(0, 0, angle - 90);
@@ -29,6 +37,8 @@ public class HealthSystem : MonoBehaviour
     {
         health -= damageAmount;
         health = Mathf.Clamp(health, 0, health);
+        if (!isBarricade && !CompareTag("Player"))
+            Flash(angle, Color.white);
 
         if (CompareTag("Player"))
             GetComponent<PlayerAim>().SetHealthBar(health);
@@ -54,6 +64,11 @@ public class HealthSystem : MonoBehaviour
             StartCoroutine(Kill(dir, angle, attacker));
         }
     }
+    public void HeadshotFeel(float angle)
+    {
+        Flash(angle, Color.red);
+        anim.SetTrigger("headshot");
+    }
 
     IEnumerator Kill(Vector2 dir, float angle, GameObject attacker)
     {
@@ -68,7 +83,7 @@ public class HealthSystem : MonoBehaviour
             if (gameObject.CompareTag("Enemy"))
             {
                 int dropChance = Random.Range(0, 101);
-                if(dropChance >= 90)
+                if (dropChance >= 90)
                 {
                     GameObject gear = Instantiate(CampManager.Instance.gearPref, gameObject.transform.position, Quaternion.identity);
                     gear.transform.parent = PoolManager.Instance.materialPoolTransform;
@@ -86,12 +101,12 @@ public class HealthSystem : MonoBehaviour
             }
             if (gameObject.CompareTag("Npc"))
             {
-                if(attacker.CompareTag("Player"))
+                if (attacker.CompareTag("Player"))
                 {
                     CampManager.Instance.SomebodyExecuted();
                     if (gameObject.GetComponentInParent<NPCStat>().marriedPersonWith != null)
                     {
-                        if(gameObject.GetComponentInParent<NPCStat>().marriedPersonWith != attacker)
+                        if (gameObject.GetComponentInParent<NPCStat>().marriedPersonWith != attacker)
                         {
                             gameObject.GetComponentInParent<NPCStat>().marriedPersonWith.GetComponentInParent<NPCStat>().ChangeRelationship(-100);
                             gameObject.GetComponentInParent<NPCStat>().marriedPersonWith.GetComponentInChildren<NPCBrain>().DriveCrazy();
@@ -109,7 +124,7 @@ public class HealthSystem : MonoBehaviour
                     UIManager.Instance.CloseNPCStatsPanel();
                 Destroy(transform.parent.gameObject);
             }
-            if(gameObject.CompareTag("Player"))
+            if (gameObject.CompareTag("Player"))
             {
                 //Destroy(gameObject);
                 GameStateManager.Instance.CurrentGameState = GameStateManager.GameState.DayActions;
@@ -128,5 +143,21 @@ public class HealthSystem : MonoBehaviour
     {
         health += value;
         health = Mathf.Clamp(health, 0, maxHealth);
+    }
+
+    void Update()
+    {
+        if(!isBarricade)
+            GetComponentInChildren<SpriteRenderer>().color = Color.Lerp(GetComponentInChildren<SpriteRenderer>().color, target, Time.deltaTime * 15);
+    }
+
+    void Flash(float angle, Color flashColor)
+    {
+        ParticleSystem bloodFxClone = Instantiate(bloodFx, transform.position + new Vector3(0,0.5f), Quaternion.identity).GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
+        bloodFxClone.transform.parent.parent.eulerAngles = new Vector3(0, 0, angle - 180);
+        bloodFxClone.collision.SetPlane(0, plane);
+        bloodFxClone.Play();
+        bloodFxClone.transform.parent.parent.SetParent(PoolManager.Instance.bloodPoolTransform);
+        GetComponentInChildren<SpriteRenderer>().color = flashColor;
     }
 }
