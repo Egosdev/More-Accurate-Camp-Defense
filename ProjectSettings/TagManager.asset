@@ -11,6 +11,7 @@ TagManager:
   - Barricade
   - Gear
   - Light
+  - NonClickable
   layers:
   - Default
   - TransparentFX
@@ -47,4 +48,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: NPC
+    uniqueID: 697625527
     locked: 0

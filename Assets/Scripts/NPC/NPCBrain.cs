@@ -19,6 +19,7 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] GameObject npcFlag;
     [SerializeField] GameObject shellPref;
     [SerializeField] Transform fireSound;
+    [SerializeField] Face faceScript;
     public GameObject[] selectShadows;
     public GameObject deadBody;
     public Transform listener;
@@ -43,7 +44,11 @@ public class NPCBrain : MonoBehaviour
 
     private void Update()
     {
-        if (!isSoldier) return;
+        if (!isSoldier)
+        {
+            LookFlag();
+            return;
+        }
         Aiming();
 
         if (shootTimer > 0)
@@ -82,6 +87,15 @@ public class NPCBrain : MonoBehaviour
         GetComponent<AIDestinationSetter>().target = coordTransform;
     }
 
+    void LookFlag() //needs refactor
+    {
+        Vector3 aimDir = (target.transform.position - transform.position).normalized;
+        gunPointAngle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(gunPointAngle, Vector3.forward);
+        npcAim.transform.rotation = Quaternion.Slerp(npcAim.transform.rotation, q, Time.deltaTime * 5);
+        faceScript.angle = npcAim.transform.rotation.eulerAngles.z;
+    }
+
     void Aiming()
     {
         if (target != null)
@@ -109,6 +123,7 @@ public class NPCBrain : MonoBehaviour
             localScale.y = +1f;
         }
         npcAim.transform.localScale = localScale;
+        faceScript.angle = npcAim.transform.rotation.eulerAngles.z;
     }
 
     Transform GetClosestObject(List<Collider2D> objects)

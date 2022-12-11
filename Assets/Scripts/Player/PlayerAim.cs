@@ -40,6 +40,7 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] Slider healthBar;
     [SerializeField] GameObject tooltip;
     [SerializeField] Transform flashlightTransform;
+    public Face faceScript;
 
     [Header("Ammo UI")]
     [SerializeField] TextMeshProUGUI clipText;
@@ -124,7 +125,7 @@ public class PlayerAim : MonoBehaviour
         float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
         aimTransform.eulerAngles = new Vector3(0, 0, angle);
         flashlightTransform.eulerAngles = new Vector3(0, 0, angle - 90);
-
+        faceScript.angle = angle;
         Vector3 localScale = Vector3.one;
         if (angle > 90 || angle < -90)
         {
@@ -165,9 +166,11 @@ public class PlayerAim : MonoBehaviour
                 return;
             }
         }
-        if (Input.GetMouseButtonDown(0) && gunStatScript.currentClip == 0)
+        if (Input.GetMouseButton(0) && gunStatScript.currentClip == 0)
         {
+            fireCooldownTimer = gunStatScript.fireRate;
             SoundManager.Instance.PlaySoundPitchRandomizer(listener.GetComponent<AudioSource>(), SoundManager.Instance.gunEmptySFX, 0.05f);
+            faceScript.CurrentFaceState = Face.FaceState.Fear;
             return;
         }
 
@@ -182,6 +185,8 @@ public class PlayerAim : MonoBehaviour
             direction.y += UnityEngine.Random.Range(-currentSpread, currentSpread);
 
             direction = direction.normalized;
+
+            faceScript.CurrentFaceState = Face.FaceState.Angry;
 
             Debug.DrawRay(gunStatScript.gunEndPointTransform.position, direction * gunStatScript.range, Color.green, 5);
 
@@ -276,6 +281,7 @@ public class PlayerAim : MonoBehaviour
         SoundManager.Instance.PlaySingleSoundAtOnce(listener.GetComponent<AudioSource>(), gunStatScript.reloadSoundClip);
         isReloading = true;
         aimAnim.SetTrigger("Reload");
+        faceScript.CurrentFaceState = Face.FaceState.Busy;
         yield return new WaitForSeconds(gunStatScript.reloadTime + reloadSpeedMultiplier);
         if (isReloading)
             CalculateAmmo();
@@ -443,6 +449,7 @@ public class PlayerAim : MonoBehaviour
         }
         if (hitSelectableTemp.CompareTag("Gear"))
         {
+            faceScript.CurrentFaceState = Face.FaceState.Fascinated;
             tempRaycastObject = hitSelectableTemp.gameObject;
             hitSelectableTemp.transform.GetChild(0).gameObject.SetActive(true);
             tooltip.transform.parent.gameObject.SetActive(true);

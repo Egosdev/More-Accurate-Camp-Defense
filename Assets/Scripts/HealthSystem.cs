@@ -41,7 +41,10 @@ public class HealthSystem : MonoBehaviour
             Flash(angle, Color.white);
 
         if (CompareTag("Player"))
+        {
             GetComponent<PlayerAim>().SetHealthBar(health);
+            GetComponent<PlayerAim>().faceScript.CurrentFaceState = Face.FaceState.Pain;
+        }
         if (CompareTag("Npc"))
         {
             if (attacker.CompareTag("Player"))
