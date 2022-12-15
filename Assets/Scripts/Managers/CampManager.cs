@@ -45,6 +45,10 @@ public class CampManager : MonoBehaviour
     public GameObject lose;
     public GameObject died;
     public bool isLose;
+    [SerializeField] Color npcWomanColor;
+    [SerializeField] Color[] colorWomanHands;
+    [SerializeField] Sprite[] jobHats; //0 engineer, 1 nurse, 2 police, 3 guitarist
+
 
     private void Start()
     {
@@ -52,38 +56,70 @@ public class CampManager : MonoBehaviour
         food = 50;
         captainPersonality = 50;
 
-        AddNPC("Ege Can", 21, 0);
+        AddCouple("Ege Can", 21, 4, "Hemþire Kadýn", 19, 4);
+        AddNPC("Gitarist Adam", 25, 0, 3);
+        AddNPC("Polis Kadýn", 25, 1, 4);
+        //AddNPC("Random Adam", 30, 0, -1);
+        //AddNPC("Ege Can", 21, 0);
+        //AddNPC("Kadýn", 25, 1);
     }
 
-    public void AddNPC(string nameSurname, int age, int gender)
+    public void AddNPC(string nameSurname, int age, int gender, int jobNumber)
     {
-        NPCSettings(CreatePeoplePref(), nameSurname, age, gender);
+        NPCSettings(CreatePeoplePref(), nameSurname, age, gender, jobNumber);
     }
 
-    void NPCSettings(GameObject newComer, string nameSurname, int age, int gender)
+    void AssignJob(GameObject newComer, int jobNumber)
+    {
+        newComer.GetComponentInChildren<NPCBrain>().job = jobNumber;
+        if(jobNumber == 3)
+        {
+            newComer.GetComponentInChildren<NPCBrain>().electroGuitar.SetActive(true);
+            newComer.GetComponentInChildren<NPCBrain>().skillCircle.SetActive(true);
+            return;
+        }
+        newComer.GetComponentInChildren<NPCBrain>().hat.SetActive(true);
+        newComer.GetComponentInChildren<NPCBrain>().hat.GetComponent<SpriteRenderer>().sprite = jobHats[jobNumber];
+    }
+
+    void NPCSettings(GameObject newComer, string nameSurname, int age, int gender, int jobNumber)
     {
         newComer.GetComponent<NPCStat>().nameSurname = nameSurname;
         newComer.GetComponent<NPCStat>().age = age;
         newComer.GetComponent<NPCStat>().gender = gender;
+        newComer.GetComponentInChildren<Face>().gender = gender;
         newComer.GetComponent<NPCStat>().playerRelationship = 60;
         newComer.name = nameSurname;
         newComer.transform.parent = PoolManager.Instance.NPCPoolTransform;
-
+        if (gender == 1)
+        {
+            newComer.GetComponentInChildren<SpriteRenderer>().color = npcWomanColor;
+            newComer.GetComponentInChildren<NPCBrain>().womanHandsSr[0].color = colorWomanHands[0];
+            newComer.GetComponentInChildren<NPCBrain>().womanHandsSr[1].color = colorWomanHands[1];
+        }
         people.Add(newComer);
         newComer.GetComponentInChildren<NPCBrain>().MoveToCoords(SelectRandomSpawnPoint());
+        if (jobNumber == -1)
+        {
+            int randomNumber = Random.Range(0, 4);
+            AssignJob(newComer, randomNumber);
+        }
+        else
+            AssignJob(newComer, jobNumber);
+
     }
     GameObject CreatePeoplePref()
     {
         GameObject newComer = Instantiate(npcPref, campCenter.transform.position, Quaternion.identity);
         return newComer;
     }
-    public void AddCouple(string nameSurnameMale, int ageMale, string nameSurnameFemale, int ageFemale)
+    public void AddCouple(string nameSurnameMale, int ageMale, int jobNumberMale, string nameSurnameFemale, int ageFemale, int jobNumberFemale)
     {
         GameObject Husband = CreatePeoplePref();
         GameObject Wife = CreatePeoplePref();
 
-        NPCSettings(Husband, nameSurnameMale, ageMale, 0);
-        NPCSettings(Wife, nameSurnameFemale, ageFemale, 1);
+        NPCSettings(Husband, nameSurnameMale, ageMale, 0, jobNumberMale);
+        NPCSettings(Wife, nameSurnameFemale, ageFemale, 1, jobNumberFemale);
         Wife.GetComponent<NPCStat>().marriedPersonWith = Husband;
         Husband.GetComponent<NPCStat>().marriedPersonWith = Wife;
     }

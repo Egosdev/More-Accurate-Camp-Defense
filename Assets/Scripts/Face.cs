@@ -7,6 +7,11 @@ public class Face : MonoBehaviour
     [SerializeField] GameObject eyes;
     [SerializeField] SpriteRenderer faceSpriteRenderer;
     [SerializeField] Sprite[] faceSprites; //0 happy, 1 wink, 2 angry, 3 fear, 4 pain, 5 busy, 6 fascinated
+    [SerializeField] Sprite[] faceSpritesFemale; //0 happy, 1 wink, 2 angry, 3 fear, 4 pain, 5 busy, 6 fascinated
+    [SerializeField] Sprite[,] faceSpritesArray;
+    [SerializeField] Sprite guitaristFace;
+    [SerializeField] NPCBrain NPCBrainScript;
+    public int gender;
     public float angle;
     private IEnumerator winkCoroutine;
     private IEnumerator changeFaceCoroutine;
@@ -14,7 +19,21 @@ public class Face : MonoBehaviour
 
     void Start()
     {
+        AssignFaceArray();
         CurrentFaceState = FaceState.Happy;
+    }
+
+    void AssignFaceArray()
+    {
+        faceSpritesArray = new Sprite[2, Mathf.Max(faceSprites.Length, faceSpritesFemale.Length)];
+        for (int i = 0; i < faceSprites.Length; i++)
+        {
+            faceSpritesArray[0, i] = faceSprites[i];
+        }
+        for (int i = 0; i < faceSpritesFemale.Length; i++)
+        {
+            faceSpritesArray[1, i] = faceSpritesFemale[i];
+        }
     }
 
     IEnumerator Wink()
@@ -29,12 +48,12 @@ public class Face : MonoBehaviour
     }
     private void Update()
     {
-        if(winkCooldown > 0)
+        if (winkCooldown > 0)
         {
             winkCooldown -= Time.deltaTime;
             winkCooldown = Mathf.Clamp(winkCooldown, 0, winkCooldown);
         }
-        if(winkCooldown <= 0)
+        if (winkCooldown <= 0)
         {
             CurrentFaceState = FaceState.Wink;
         }
@@ -69,13 +88,18 @@ public class Face : MonoBehaviour
         get { return currentFaceState; }
         set
         {
+            if (NPCBrainScript != null && NPCBrainScript.job == 3)
+            {
+                faceSpriteRenderer.sprite = guitaristFace;
+                return;
+            }
             currentFaceState = value;
             OnStateChanged(value);
         }
     }
     void OnStateChanged(FaceState state)
     {
-        winkCooldown = 3.5f;
+        winkCooldown = Random.Range(3, 3.5f);
 
         if (state == FaceState.Wink)
         {
@@ -86,14 +110,14 @@ public class Face : MonoBehaviour
 
         StopAllCoroutines();
 
-        if(state == FaceState.Pain)
+        if (state == FaceState.Pain)
         {
             changeFaceCoroutine = ChangeFace(state, 0.4f, eyes);
             StartCoroutine(changeFaceCoroutine);
             return;
         }
 
-        if(state == FaceState.Fascinated)
+        if (state == FaceState.Fascinated)
         {
             changeFaceCoroutine = ChangeFace(state, 0.05f, eyes);
             StartCoroutine(changeFaceCoroutine);
@@ -102,14 +126,14 @@ public class Face : MonoBehaviour
 
         eyes.SetActive(true);
 
-        if(state == FaceState.Fear)
+        if (state == FaceState.Fear)
         {
             changeFaceCoroutine = ChangeFace(state, 3f);
             StartCoroutine(changeFaceCoroutine);
             return;
         }
 
-        if(state == FaceState.Busy)
+        if (state == FaceState.Busy)
         {
             changeFaceCoroutine = ChangeFace(state, 2f);
             StartCoroutine(changeFaceCoroutine);
@@ -122,16 +146,16 @@ public class Face : MonoBehaviour
 
     IEnumerator ChangeFace(FaceState state, float time)
     {
-        faceSpriteRenderer.sprite = faceSprites[(int)state];
+        faceSpriteRenderer.sprite = faceSpritesArray[gender, (int)state];
         yield return new WaitForSeconds(time);
-        faceSpriteRenderer.sprite = faceSprites[0];
+        faceSpriteRenderer.sprite = faceSpritesArray[gender, 0];
     }
     IEnumerator ChangeFace(FaceState state, float time, GameObject eyes)
     {
-        faceSpriteRenderer.sprite = faceSprites[(int)state];
+        faceSpriteRenderer.sprite = faceSpritesArray[gender, (int)state];
         eyes.SetActive(false);
         yield return new WaitForSeconds(time);
         eyes.SetActive(true);
-        faceSpriteRenderer.sprite = faceSprites[0];
+        faceSpriteRenderer.sprite = faceSpritesArray[gender, 0];
     }
 }

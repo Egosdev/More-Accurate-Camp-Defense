@@ -44,17 +44,17 @@ public class Spawner : MonoBehaviour
             if (randomNumber < 15) //%15
             {
                 Debug.Log("fat spawned");
-                ZombieCusomizer(newZombie, Random.Range(50,60), 1, 3, 3, Random.Range(20, 25), EnemyBrain.EnemyType.Fat, WaveManager.Instance.colorFat, WaveManager.Instance.colorFatDead, WaveManager.Instance.colorFatHands);
+                ZombieCusomizer(newZombie, Random.Range(50,60), 1, 3, 1.5f, Random.Range(20, 25), EnemyBrain.EnemyType.Fat, WaveManager.Instance.colorFat, WaveManager.Instance.colorFatDead, WaveManager.Instance.colorFatHands);
             }
             else if (randomNumber < 40) //%25
             {
                 Debug.Log("speedy spawned");
-                ZombieCusomizer(newZombie, Random.Range(10, 15), Random.Range(5, 7), 4, 3, Random.Range(10, 15), EnemyBrain.EnemyType.Speedy, WaveManager.Instance.colorSpeedy, WaveManager.Instance.colorSpeedyDead, WaveManager.Instance.colorSpeedyHands);
+                ZombieCusomizer(newZombie, Random.Range(10, 15), Random.Range(5, 7), 4, 1.5f, Random.Range(10, 15), EnemyBrain.EnemyType.Speedy, WaveManager.Instance.colorSpeedy, WaveManager.Instance.colorSpeedyDead, WaveManager.Instance.colorSpeedyHands);
             }
             else if (randomNumber < 100) //%60
             {
                 Debug.Log("normal spawned");
-                ZombieCusomizer(newZombie, Random.Range(20, 25), 3, Random.Range(5, 7), 3, Random.Range(10, 15), EnemyBrain.EnemyType.Normal, WaveManager.Instance.colorNormal, WaveManager.Instance.colorNormalDead, WaveManager.Instance.colorNormalHands);
+                ZombieCusomizer(newZombie, Random.Range(20, 25), 3, Random.Range(5, 7), 1.5f, Random.Range(10, 15), EnemyBrain.EnemyType.Normal, WaveManager.Instance.colorNormal, WaveManager.Instance.colorNormalDead, WaveManager.Instance.colorNormalHands);
             }
         }
     }

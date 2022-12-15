@@ -8,7 +8,7 @@ public class EnemyAttack : MonoBehaviour
     [SerializeField] List<Collider2D> ObjectsInAttackableAreaList;
     [SerializeField] Animator anim;
     public int attackDamage;
-    public float attackCooldown = 3;
+    public float attackCooldown = 1;
 
     private void Update()
     {
@@ -21,7 +21,7 @@ public class EnemyAttack : MonoBehaviour
         {
             if (ObjectsInAttackableAreaList.Count == 0)
             {
-                Debug.Log("0");
+                //Debug.Log("0");
             }
 
             for (int i = 0; i < ObjectsInAttackableAreaList.Count; i++)
@@ -59,11 +59,11 @@ public class EnemyAttack : MonoBehaviour
     {
         if (attackTime <= 0)
         {
-            //attackTime = attackCooldown; // make random later
-            attackTime = 2;
+            attackTime = attackCooldown; // make random later
+            //attackTime = 2;
             //anim.SetFloat("fitAnim", 0.34f);
             anim.SetTrigger("Attack");
-            Debug.Log("attack time = 3");
+            //Debug.Log("attack time = 3");
         }
     }
 }

@@ -47,6 +47,7 @@ public class HealthSystem : MonoBehaviour
         }
         if (CompareTag("Npc"))
         {
+            GetComponent<NPCBrain>().faceScript.CurrentFaceState = Face.FaceState.Pain;
             if (attacker.CompareTag("Player"))
             {
                 transform.parent.GetComponent<NPCStat>().ChangeRelationship(-2);

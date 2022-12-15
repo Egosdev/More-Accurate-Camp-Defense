@@ -702,6 +702,7 @@ GameObject:
   - component: {fileID: 2924618602930444865}
   - component: {fileID: 8427077820410544251}
   - component: {fileID: 2191712604608272219}
+  - component: {fileID: 1416648113468228740}
   m_Layer: 15
   m_Name: GFX
   m_TagString: Untagged
@@ -810,6 +811,32 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1416648113468228740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2924618602930444871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 1
+  m_ApplyToSortingLayers: 00000000b7eb9429d57bb036
+  m_ShapePath:
+  - {x: -0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: 0.5, z: 0}
+  - {x: -0.5, y: 0.5, z: 0}
+  m_ShapePathHash: 160822549
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 586698
 --- !u!1 &3176436020367483853
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,7 +1035,7 @@ MonoBehaviour:
   ObjectsInAttackableAreaList: []
   anim: {fileID: 3844415975760637565}
   attackDamage: 5
-  attackCooldown: 2
+  attackCooldown: 1
 --- !u!1 &5909405663845005985
 GameObject:
   m_ObjectHideFlags: 0

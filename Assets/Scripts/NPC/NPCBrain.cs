@@ -19,18 +19,26 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] GameObject npcFlag;
     [SerializeField] GameObject shellPref;
     [SerializeField] Transform fireSound;
-    [SerializeField] Face faceScript;
+    public Face faceScript;
+    public GameObject bonusIcon;
     public GameObject[] selectShadows;
     public GameObject deadBody;
     public Transform listener;
     public bool isAngry;
     public bool isSoldier;
+    public SpriteRenderer[] womanHandsSr;
+    public GameObject hat;
+    public GameObject electroGuitar;
+    public GameObject skillCircle;
+    public int job;
     Vector3 bulletTraceVector;
     Vector3 moveTargetCoords;
     float gunPointAngle;
     Gun gunStatScript;
     AIPath aiPath;
     AIDestinationSetter aiDestinationSetterScript;
+    float guitarTargetZValue;
+    float guitarCurrentZValue;
 
     // T moves npc, M marry
 
@@ -84,7 +92,8 @@ public class NPCBrain : MonoBehaviour
     }
     public void MoveToCoords(Transform coordTransform)
     {
-        GetComponent<AIDestinationSetter>().target = coordTransform;
+        npcFlag.transform.position = coordTransform.position;
+        GetComponent<AIDestinationSetter>().target = coordTransform; //aiDestinationSetterScript doesn't set.
     }
 
     void LookFlag() //needs refactor
@@ -94,6 +103,23 @@ public class NPCBrain : MonoBehaviour
         Quaternion q = Quaternion.AngleAxis(gunPointAngle, Vector3.forward);
         npcAim.transform.rotation = Quaternion.Slerp(npcAim.transform.rotation, q, Time.deltaTime * 5);
         faceScript.angle = npcAim.transform.rotation.eulerAngles.z;
+
+        if(job == 3)
+        {
+            skillCircle.transform.Rotate(Vector3.forward * 15 * Time.deltaTime, Space.Self);
+            if (npcAim.transform.rotation.eulerAngles.z >= 0 && npcAim.transform.rotation.eulerAngles.z <= 180)
+            {
+                electroGuitar.SetActive(false);
+                return;
+            }
+            electroGuitar.SetActive(true);
+            guitarCurrentZValue = Mathf.MoveTowards(guitarCurrentZValue, guitarTargetZValue, Time.deltaTime * 55);
+            if (guitarTargetZValue == guitarCurrentZValue)
+            {
+                guitarTargetZValue = Random.Range(-20, -5);
+            }
+            electroGuitar.transform.eulerAngles = new Vector3(electroGuitar.transform.eulerAngles.x, npcAim.transform.rotation.eulerAngles.z + 90, guitarCurrentZValue);
+        }
     }
 
     void Aiming()
@@ -193,6 +219,7 @@ public class NPCBrain : MonoBehaviour
                     EjectShell();
                     fireSound.position = gunStatScript.gunEndPointTransform.position;
                     //fireSound.GetComponent<AudioSource>().clip = gunStatScript.fireSoundClip;
+                    faceScript.CurrentFaceState = Face.FaceState.Angry;
                     SoundManager.Instance.PlaySoundPitchRandomizer(fireSound.GetComponent<AudioSource>(), gunStatScript.fireSoundClip, 0.15f);
                 }
             }
@@ -240,8 +267,10 @@ public class NPCBrain : MonoBehaviour
     }
     public void Flirt()
     {
-        int randomValue = Random.Range(0, 101);
         int relation = transform.parent.GetComponent<NPCStat>().playerRelationship;
+        if (relation < 75) return;
+
+        int randomValue = Random.Range(0, 101);
         if(randomValue + relation >= 175)
         {
             if(transform.parent.GetComponent<NPCStat>().marriedPersonWith != null && transform.parent.GetComponent<NPCStat>().marriedPersonWith != CampManager.Instance.player)

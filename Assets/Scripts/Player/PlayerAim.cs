@@ -64,6 +64,7 @@ public class PlayerAim : MonoBehaviour
     [Header("User Feedback")]
     public GameObject repairIcon;
     public GameObject interactIcon;
+    public GameObject bonusIcon;
 
     // Must Delete: Drawray
     private void Start()
@@ -396,10 +397,10 @@ public class PlayerAim : MonoBehaviour
 
     private void Selectable() //0: green(select), 1: blue(mouseover)
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T) || Input.GetMouseButtonDown(1))
         {
             if (interactableObject == null) return;
-            if (interactableObject.GetComponentInParent<NPCStat>().playerRelationship < 50) return;
+            //if (interactableObject.GetComponentInParent<NPCStat>().playerRelationship < 50) return;
 
             interactableObject.GetComponent<NPCBrain>().MoveToCoords();
         }

@@ -62,6 +62,8 @@ public class UIManager : MonoBehaviour
 
     public void RecruitButton()
     {
+        if (displayWhichNpc.GetComponentInChildren<NPCBrain>().job == 3) return;
+
         if (CampManager.Instance.reputation > 0 && !displayWhichNpc.GetComponentInChildren<NPCBrain>().isSoldier)
         {
             CampManager.Instance.reputation--;

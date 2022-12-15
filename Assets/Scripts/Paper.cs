@@ -188,7 +188,7 @@ public class Paper : MonoBehaviour
             warnCreateMessage.text = "Age must be older than 18!";
             return;
         }
-        CampManager.Instance.AddNPC(singleName.text, int.Parse(singleAge.text), singleGender.value);
+        CampManager.Instance.AddNPC(singleName.text, int.Parse(singleAge.text), singleGender.value, -1);
         warnCreateMessage.text = "Done!";
         Choose(true);
     }
@@ -214,7 +214,7 @@ public class Paper : MonoBehaviour
             }
         }
 
-        CampManager.Instance.AddCouple(coupleName[0].text, int.Parse(coupleAge[0].text), coupleName[1].text, int.Parse(coupleAge[1].text));
+        CampManager.Instance.AddCouple(coupleName[0].text, int.Parse(coupleAge[0].text), -1, coupleName[1].text, int.Parse(coupleAge[1].text), -1);
         warnCoupleCreateMessage.text = "Done!";
         Choose(true);
     }
