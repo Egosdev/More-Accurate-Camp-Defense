@@ -49,19 +49,16 @@ public class CampManager : MonoBehaviour
     [SerializeField] Color[] colorWomanHands;
     [SerializeField] Sprite[] jobHats; //0 engineer, 1 nurse, 2 police, 3 guitarist
 
-
     private void Start()
     {
         materials = 50;
         food = 50;
         captainPersonality = 50;
 
-        AddCouple("Ege Can", 21, 4, "Hemþire Kadýn", 19, 4);
-        AddNPC("Gitarist Adam", 25, 0, 3);
-        AddNPC("Polis Kadýn", 25, 1, 4);
-        //AddNPC("Random Adam", 30, 0, -1);
-        //AddNPC("Ege Can", 21, 0);
-        //AddNPC("Kadýn", 25, 1);
+        AddCouple("Gordon", 27, 4, "Alyx", 24, 4);
+        AddNPC("Tangöze", 49, 0, 3);
+        AddNPC("Ege Can", 21, 0, 4);
+
     }
 
     public void AddNPC(string nameSurname, int age, int gender, int jobNumber)
@@ -74,7 +71,7 @@ public class CampManager : MonoBehaviour
         newComer.GetComponentInChildren<NPCBrain>().job = jobNumber;
         if(jobNumber == 3)
         {
-            newComer.GetComponentInChildren<NPCBrain>().electroGuitar.SetActive(true);
+            newComer.GetComponentInChildren<NPCBrain>().electroGuitar.transform.parent.gameObject.SetActive(true);
             newComer.GetComponentInChildren<NPCBrain>().skillCircle.SetActive(true);
             return;
         }
@@ -173,13 +170,13 @@ public class CampManager : MonoBehaviour
     }
     public void LoseCondition(int stat)
     {
-        if (stat <= 0 || stat >= 100)
-        {
-            UIManager.Instance.DoTransition(true);
-            GameStateManager.Instance.CurrentGameState = GameStateManager.GameState.DayActions;
-            lose.SetActive(true);
-            isLose = true;
-        }
+        //if (stat <= 0 || stat >= 100)
+        //{
+        //    UIManager.Instance.DoTransition(true);
+        //    GameStateManager.Instance.CurrentGameState = GameStateManager.GameState.DayActions;
+        //    lose.SetActive(true);
+        //    isLose = true;
+        //}
 
     }
     public void Rebellion()
@@ -191,6 +188,15 @@ public class CampManager : MonoBehaviour
                 npc.GetComponentInChildren<NPCBrain>().MakeRebel();
         }
     }
+
+    public void RebellionAll()
+    {
+        foreach (Transform npc in PoolManager.Instance.NPCPoolTransform)
+        {
+            npc.GetComponentInChildren<NPCBrain>().MakeRebel();
+        }
+    }
+
     public void Craft(int value)
     {
         SoundManager.Instance.PlaySound(player.GetComponent<PlayerAim>().listener.GetComponent<AudioSource>(), SoundManager.Instance.craftingSFX);
@@ -223,7 +229,7 @@ public class CampManager : MonoBehaviour
             if (materials > 0)
             {
                 giftCount++;
-                giftText.text = "Gift: " + giftCount.ToString();
+                giftText.text = giftCount.ToString();
                 SetMaterial(-1);
             }
         }
@@ -232,7 +238,7 @@ public class CampManager : MonoBehaviour
             if (food > 0)
             {
                 pillsCount++;
-                pillsText.text = "Medical Pills: " + pillsCount.ToString();
+                pillsText.text = pillsCount.ToString();
                 SetFood(-1);
             }
         }
@@ -253,5 +259,14 @@ public class CampManager : MonoBehaviour
             if(isLose)
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
+    }
+
+    public void DebugNPC()
+    {
+        AddNPC("npc_test", Random.Range(20, 30), Random.Range(0,2), 4);
+    }
+    public void DebugNPCCouple()
+    {
+        AddCouple("npc_man", Random.Range(20,30), 4, "npc_woman", Random.Range(20, 30), 4);
     }
 }

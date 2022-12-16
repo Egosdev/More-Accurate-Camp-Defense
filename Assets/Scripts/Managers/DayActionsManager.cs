@@ -180,19 +180,25 @@ public class DayActionsManager : MonoBehaviour
 
     public void BackToCamp()
     {
-        if (waitingAnswerPaperList.Count == 0)
-        {
-            GameStateManager.Instance.CurrentGameState = GameStateManager.GameState.FreeRoam;
-            LightManager.Instance.TurnAllLights(false);
-            WaveManager.Instance.waveText.text = "Press 'F' To Next Wave";
-            StartCoroutine(ChangeCanvas(false));
-            SoundManager.Instance.PlaySound(CampManager.Instance.player.GetComponent<PlayerAim>().listener.GetComponent<AudioSource>(), SoundManager.Instance.dayTimeSFX);
-            SoundManager.Instance.PlaySingleSoundAtOnce(CampManager.Instance.player.GetComponent<PlayerAim>().ambience.GetComponent<AudioSource>(), SoundManager.Instance.ambience[0]);
-        }
-        else
-        {
-            StartCoroutine(DisplayWarnMessage());
-        }
+        GameStateManager.Instance.CurrentGameState = GameStateManager.GameState.FreeRoam;
+        LightManager.Instance.TurnAllLights(false);
+        WaveManager.Instance.waveText.text = "Press 'N' To Next Night";
+        SoundManager.Instance.PlaySound(CampManager.Instance.player.GetComponent<PlayerAim>().listener.GetComponent<AudioSource>(), SoundManager.Instance.dayTimeSFX);
+        SoundManager.Instance.PlaySingleSoundAtOnce(CampManager.Instance.player.GetComponent<PlayerAim>().ambience.GetComponent<AudioSource>(), SoundManager.Instance.ambience[0]);
+
+        //if (waitingAnswerPaperList.Count == 0)
+        //{
+        //    GameStateManager.Instance.CurrentGameState = GameStateManager.GameState.FreeRoam;
+        //    LightManager.Instance.TurnAllLights(false);
+        //    WaveManager.Instance.waveText.text = "Press 'N' To Next Wave";
+        //    StartCoroutine(ChangeCanvas(false));
+        //    SoundManager.Instance.PlaySound(CampManager.Instance.player.GetComponent<PlayerAim>().listener.GetComponent<AudioSource>(), SoundManager.Instance.dayTimeSFX);
+        //    SoundManager.Instance.PlaySingleSoundAtOnce(CampManager.Instance.player.GetComponent<PlayerAim>().ambience.GetComponent<AudioSource>(), SoundManager.Instance.ambience[0]);
+        //}
+        //else
+        //{
+        //    StartCoroutine(DisplayWarnMessage());
+        //}
     }
     IEnumerator DisplayWarnMessage()
     {

@@ -100,7 +100,12 @@ public class LevelingManager : MonoBehaviour
         requiredExpForNextLevel += (currentLevel - 1) * 10;
         slider.maxValue = requiredExpForNextLevel;
         target = 0;
+        AddReputation();
+    }
+
+    public void AddReputation()
+    {
         CampManager.Instance.reputation++;
-        CampManager.Instance.reputationText.text = "Reputation: " + CampManager.Instance.reputation.ToString();
+        CampManager.Instance.reputationText.text = CampManager.Instance.reputation.ToString();
     }
 }

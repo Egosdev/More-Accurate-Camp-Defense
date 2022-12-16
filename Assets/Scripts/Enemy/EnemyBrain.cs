@@ -13,7 +13,9 @@ public class EnemyBrain : MonoBehaviour
     [SerializeField] GameObject enemyAim;
     [SerializeField] GameObject attackRange;
     [SerializeField] Transform targetTransform;
+    [SerializeField] Face faceScript;
     public GameObject deadBody;
+    public GameObject shadowBody;
     public Transform listener;
     [SerializeField] Transform moanListener;
     public int expAmount;
@@ -60,11 +62,11 @@ public class EnemyBrain : MonoBehaviour
         Vector3 currentPos = followRadiusObject.transform.position;
         foreach (Collider2D t in objects)
         {
-            if (t.CompareTag("Player"))
-            {
-                tMin = t.transform;
-                return tMin;
-            }
+            //if (t.CompareTag("Player"))
+            //{
+            //    tMin = t.transform;
+            //    return tMin;
+            //}
             float dist = Vector3.Distance(t.transform.position, currentPos);
             if (dist < minDist)
             {
@@ -99,6 +101,7 @@ public class EnemyBrain : MonoBehaviour
             localScale.y = +1f;
         }
         enemyAim.transform.localScale = localScale;
+        faceScript.angle = enemyAim.transform.rotation.eulerAngles.z;
     }
 
     public void Moaning()

@@ -37,6 +37,8 @@ public class UIManager : MonoBehaviour
     public Button npcPanelFlirtButton;
     public Sprite[] perks;
     public GameObject displayWhichNpc;
+    public GameObject debugPanel;
+    public GameObject craftingPanel;
     public Slider materialSlider;
     public Slider personalitySlider;
     public Slider foodSlider;
@@ -54,7 +56,7 @@ public class UIManager : MonoBehaviour
         if (CampManager.Instance.giftCount > 0)
         {
             CampManager.Instance.giftCount--;
-            CampManager.Instance.giftText.text = "Gift: " + CampManager.Instance.giftCount.ToString();
+            CampManager.Instance.giftText.text = CampManager.Instance.giftCount.ToString();
             displayWhichNpc.GetComponent<NPCStat>().ChangeRelationship(10);
             displayWhichNpc.GetComponent<NPCStat>().OpenNPCStatsPanel();
         }
@@ -67,7 +69,7 @@ public class UIManager : MonoBehaviour
         if (CampManager.Instance.reputation > 0 && !displayWhichNpc.GetComponentInChildren<NPCBrain>().isSoldier)
         {
             CampManager.Instance.reputation--;
-            CampManager.Instance.reputationText.text = "Reputation: " + CampManager.Instance.reputation.ToString();
+            CampManager.Instance.reputationText.text = CampManager.Instance.reputation.ToString();
             displayWhichNpc.GetComponentInChildren<NPCBrain>().Recruit();
             displayWhichNpc.GetComponent<NPCStat>().OpenNPCStatsPanel();
         }
@@ -82,7 +84,7 @@ public class UIManager : MonoBehaviour
         if(CampManager.Instance.pillsCount > 0 && displayWhichNpc.GetComponentInChildren<HealthSystem>().health != displayWhichNpc.GetComponentInChildren<HealthSystem>().maxHealth)
         {
             CampManager.Instance.pillsCount--;
-            CampManager.Instance.pillsText.text = "Medical Pills: " + CampManager.Instance.pillsCount.ToString();
+            CampManager.Instance.pillsText.text = CampManager.Instance.pillsCount.ToString();
             displayWhichNpc.GetComponentInChildren<HealthSystem>().Heal(25);
             displayWhichNpc.GetComponent<NPCStat>().ChangeRelationship(1);
             displayWhichNpc.GetComponent<NPCStat>().OpenNPCStatsPanel();
@@ -104,5 +106,16 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         transition.color = new Color(0, 0, 0, Mathf.MoveTowards(transition.color.a, alphaValue, Time.deltaTime));
+
+        if(Input.GetKeyDown(KeyCode.Delete))
+        {
+            if(debugPanel.activeSelf)
+                debugPanel.SetActive(false);
+            else
+                debugPanel.SetActive(true);
+
+            if (craftingPanel.activeSelf)
+                craftingPanel.SetActive(false);
+        }
     }
 }

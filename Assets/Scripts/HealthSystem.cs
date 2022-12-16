@@ -87,7 +87,7 @@ public class HealthSystem : MonoBehaviour
             if (gameObject.CompareTag("Enemy"))
             {
                 int dropChance = Random.Range(0, 101);
-                if (dropChance >= 90)
+                if (dropChance >= 75)
                 {
                     GameObject gear = Instantiate(CampManager.Instance.gearPref, gameObject.transform.position, Quaternion.identity);
                     gear.transform.parent = PoolManager.Instance.materialPoolTransform;
@@ -96,6 +96,8 @@ public class HealthSystem : MonoBehaviour
                 gameObject.transform.parent = null;
                 WaveManager.Instance.CheckWaveCompleted();
                 LevelingManager.Instance.GainExp(gameObject.GetComponent<EnemyBrain>().expAmount);
+                gameObject.GetComponent<EnemyBrain>().shadowBody.transform.SetParent(gameObject.GetComponent<EnemyBrain>().listener);
+                gameObject.GetComponent<EnemyBrain>().shadowBody.GetComponent<MakeTransparent>().Kill();
                 gameObject.GetComponent<EnemyBrain>().listener.parent = PoolManager.Instance.corpsePoolTransform;
                 SoundManager.Instance.PlaySoundPitchRandomizer(gameObject.GetComponent<EnemyBrain>().listener.GetComponent<AudioSource>(), SoundManager.Instance.GiveRandomClip(SoundManager.Instance.deathSFX), 0.15f);
                 SoundManager.Instance.PlaySoundPitchRandomizer(gameObject.GetComponent<EnemyBrain>().listener.GetComponent<AudioSource>(), SoundManager.Instance.GiveRandomClip(SoundManager.Instance.bodyFallSFX), 0.15f, 0.15f);
@@ -152,7 +154,7 @@ public class HealthSystem : MonoBehaviour
     void Update()
     {
         if(!isBarricade)
-            GetComponentInChildren<SpriteRenderer>().color = Color.Lerp(GetComponentInChildren<SpriteRenderer>().color, target, Time.deltaTime * 15);
+            GetComponentInChildren<SpriteRenderer>().color = Color.Lerp(GetComponentInChildren<SpriteRenderer>().color, target, Time.deltaTime * 9);
     }
 
     void Flash(float angle, Color flashColor)

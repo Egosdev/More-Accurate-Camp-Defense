@@ -31,7 +31,7 @@ public class CampFire : MonoBehaviour
             if (isPlayerClose && GameStateManager.Instance.CurrentGameState == GameStateManager.GameState.WaveCompleted)
             {
                 CampManager.Instance.player.GetComponent<PlayerAim>().interactIcon.SetActive(false);
-                DayActionsManager.Instance.GoToDayActions();
+                DayActionsManager.Instance.BackToCamp();
             }
         }
     }

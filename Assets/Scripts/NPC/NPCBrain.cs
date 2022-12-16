@@ -39,7 +39,10 @@ public class NPCBrain : MonoBehaviour
     AIDestinationSetter aiDestinationSetterScript;
     float guitarTargetZValue;
     float guitarCurrentZValue;
-
+    bool walkAround;
+    bool followPlayer;
+    float walkAroundTimer;
+    float followPlayerTimer;
     // T moves npc, M marry
 
     private void Start()
@@ -52,6 +55,39 @@ public class NPCBrain : MonoBehaviour
 
     private void Update()
     {
+        if(walkAroundTimer > 0)
+        {
+            walkAroundTimer -= Time.deltaTime;
+            walkAroundTimer = Mathf.Clamp(walkAroundTimer, 0, walkAroundTimer);
+        }
+        if(walkAround && walkAroundTimer <= 0)
+        {
+            walkAroundTimer = Random.Range(2f,3f);
+            npcFlag.transform.position = Random.insideUnitCircle * 4 + (Vector2)transform.position;
+            GetComponent<AIDestinationSetter>().target = npcFlag.transform;
+        }
+        if(followPlayer)
+        {
+            float distance = Vector3.Distance(transform.position, CampManager.Instance.player.transform.position);
+            if (distance > 6)
+            {
+                npcFlag.transform.position = CampManager.Instance.player.transform.position;
+            }
+            else
+            {
+                if (followPlayerTimer > 0)
+                {
+                    followPlayerTimer -= Time.deltaTime;
+                    followPlayerTimer = Mathf.Clamp(followPlayerTimer, 0, followPlayerTimer);
+                }
+            }
+            if(followPlayerTimer <= 0)
+            {
+                followPlayerTimer = Random.Range(6f, 15f);
+                npcFlag.transform.position = Random.insideUnitCircle * 4 + (Vector2)CampManager.Instance.player.transform.position;
+            }
+        }
+
         if (!isSoldier)
         {
             LookFlag();
@@ -94,6 +130,16 @@ public class NPCBrain : MonoBehaviour
     {
         npcFlag.transform.position = coordTransform.position;
         GetComponent<AIDestinationSetter>().target = coordTransform; //aiDestinationSetterScript doesn't set.
+    }
+
+    public void WalkAround(bool _bool)
+    {
+        walkAround = _bool;
+    }
+
+    public void FollowPlayer(bool _bool)
+    {
+        followPlayer = _bool;
     }
 
     void LookFlag() //needs refactor
@@ -257,6 +303,8 @@ public class NPCBrain : MonoBehaviour
         }
 
         selectShadows[index].SetActive(value);
+        if (selectShadows[0].activeSelf) SetActiveFlag(true);
+        if(!selectShadows[0].activeSelf) SetActiveFlag(false);
     }
     public void Recruit()
     {
@@ -273,13 +321,6 @@ public class NPCBrain : MonoBehaviour
         int randomValue = Random.Range(0, 101);
         if(randomValue + relation >= 175)
         {
-            if(transform.parent.GetComponent<NPCStat>().marriedPersonWith != null && transform.parent.GetComponent<NPCStat>().marriedPersonWith != CampManager.Instance.player)
-            {
-                transform.parent.GetComponent<NPCStat>().marriedPersonWith.GetComponent<NPCStat>().ChangeRelationship(-100);
-                transform.parent.GetComponent<NPCStat>().marriedPersonWith.GetComponent<NPCStat>().marriedPersonWith = null;
-                transform.parent.GetComponent<NPCStat>().marriedPersonWith.GetComponentInChildren<NPCBrain>().DriveCrazy();
-            }
-            transform.parent.GetComponent<NPCStat>().marriedPersonWith = CampManager.Instance.player;
             CampManager.Instance.player.GetComponent<PlayerAim>().Marry();
         }
         else
@@ -311,5 +352,10 @@ public class NPCBrain : MonoBehaviour
             MoveToCoords(CampManager.Instance.player.transform);
             aiPath.endReachedDistance = 4;
         }
+    }
+
+    public void SetActiveFlag(bool _bool)
+    {
+        npcFlag.SetActive(_bool);
     }
 }

@@ -25,7 +25,7 @@ public class Flashlight : MonoBehaviour, LightManager.ILightSetter
     {
         if (GameStateManager.Instance.CurrentGameState == GameStateManager.GameState.DayActions || GameStateManager.Instance.CurrentGameState == GameStateManager.GameState.FreeRoam) return;
 
-        if(Input.GetKeyDown(KeyCode.N))
+        if(Input.GetKeyDown(KeyCode.F))
         {
             if (flashlight.activeSelf)
                 flashlight.SetActive(false);

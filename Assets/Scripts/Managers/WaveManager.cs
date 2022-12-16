@@ -51,7 +51,7 @@ public class WaveManager : MonoBehaviour
         LightManager.Instance.TurnAllLights(true);
         SoundManager.Instance.PlaySound(CampManager.Instance.player.GetComponent<PlayerAim>().listener.GetComponent<AudioSource>(), SoundManager.Instance.waveStartSFX);
         _currentWave++;
-        waveText.text = "Wave " + _currentWave.ToString();
+        waveText.text = "Night " + _currentWave.ToString();
 
         numberOfAllExpectedZombiesForWave = (5 * _currentWave) + 5;
 
@@ -91,7 +91,7 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.N))
         {
             if (GameStateManager.Instance.CurrentGameState != GameStateManager.GameState.FreeRoam) return;
 

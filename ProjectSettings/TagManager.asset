@@ -55,3 +55,6 @@ TagManager:
   - name: Player
     uniqueID: 917535701
     locked: 0
+  - name: Zombie
+    uniqueID: 452061269
+    locked: 0

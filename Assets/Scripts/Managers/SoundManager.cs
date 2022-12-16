@@ -30,6 +30,7 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         SetEffectLevel(0.05f);
+        SetMusicLevel(0.07f);
     }
 
     public void PlaySingleSoundAtOnce(AudioSource audioSource, AudioClip audioClip)

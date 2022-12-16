@@ -22,11 +22,12 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] Transform fireSound;
     public Transform listener;
     public Transform ambience;
-
     public float currentSpread;
     bool isReloading;
     int headShotChance;
     float pillTimer;
+    float rightClickTimer;
+    Vector3 rightClickCoords;
     [Header("Cursor & Aim Cam")]
     [SerializeField] GameObject cursor;
     [SerializeField] GameObject ghostCursor;
@@ -65,7 +66,7 @@ public class PlayerAim : MonoBehaviour
     public GameObject repairIcon;
     public GameObject interactIcon;
     public GameObject bonusIcon;
-
+    public GameObject radialMenu;
     // Must Delete: Drawray
     private void Start()
     {
@@ -86,6 +87,7 @@ public class PlayerAim : MonoBehaviour
             currentGunId++;
             if (currentGunId == aimTransform.childCount) currentGunId = 0;
             SwapWeapon(currentGunId);
+            aimAnim = aimTransform.GetChild(currentGunId).GetChild(0).GetComponent<Animator>();
         }
 
         if (fireCooldownTimer > 0)
@@ -397,7 +399,34 @@ public class PlayerAim : MonoBehaviour
 
     private void Selectable() //0: green(select), 1: blue(mouseover)
     {
-        if (Input.GetKeyDown(KeyCode.T) || Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (interactableObject == null) return;
+            Vector3 test = new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, 0);
+            rightClickCoords = test;
+        }
+        if (Input.GetMouseButton(1))
+        {
+            if (interactableObject == null) return;
+            rightClickTimer += Time.deltaTime;
+            if (rightClickTimer >= 0.2f)
+            {
+                radialMenu.SetActive(true);
+                radialMenu.transform.position = rightClickCoords;
+            }
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            rightClickTimer = 0;
+            radialMenu.SetActive(false);
+            if (rightClickTimer < 0.2f)
+            {
+                if (interactableObject == null) return;
+                interactableObject.GetComponent<NPCBrain>().MoveToCoords();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
         {
             if (interactableObject == null) return;
             //if (interactableObject.GetComponentInParent<NPCStat>().playerRelationship < 50) return;
@@ -407,6 +436,13 @@ public class PlayerAim : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if (UIManager.Instance.debugPanel.activeSelf)
+                UIManager.Instance.debugPanel.SetActive(false);
+
+            if (UIManager.Instance.craftingPanel.activeSelf)
+                UIManager.Instance.craftingPanel.SetActive(false);
+
+
             if (interactableObject == null) return;
 
             if (interactableObject != null && interactableObject.CompareTag("Npc"))
@@ -473,6 +509,14 @@ public class PlayerAim : MonoBehaviour
 
     public void Marry()
     {
+        if (interactableObject.GetComponentInParent<NPCStat>().marriedPersonWith != null && interactableObject.GetComponentInParent<NPCStat>().marriedPersonWith != CampManager.Instance.player)
+        {
+            interactableObject.GetComponentInParent<NPCStat>().marriedPersonWith.GetComponentInParent<NPCStat>().ChangeRelationship(-100);
+            interactableObject.GetComponentInParent<NPCStat>().marriedPersonWith.GetComponentInParent<NPCStat>().marriedPersonWith = null;
+            interactableObject.GetComponentInParent<NPCStat>().marriedPersonWith.GetComponentInChildren<NPCBrain>().DriveCrazy();
+        }
+        interactableObject.GetComponentInParent<NPCStat>().marriedPersonWith = CampManager.Instance.player;
+
         if (marriedNPC != null)
         {
             marriedNPC.GetComponent<NPCStat>().statusHolder.SetActive(false);
@@ -539,7 +583,7 @@ public class PlayerAim : MonoBehaviour
                     pillTimer = 5;
                     SoundManager.Instance.PlaySound(listener.GetComponent<AudioSource>(), SoundManager.Instance.pillsSFX);
                     CampManager.Instance.pillsCount--;
-                    CampManager.Instance.pillsText.text = "Medical Pills: " + CampManager.Instance.pillsCount.ToString();
+                    CampManager.Instance.pillsText.text = CampManager.Instance.pillsCount.ToString();
                     GetComponent<HealthSystem>().health += 20;
                     GetComponent<HealthSystem>().health = Mathf.Clamp(GetComponent<HealthSystem>().health, GetComponent<HealthSystem>().health, GetComponent<HealthSystem>().maxHealth);
                     SetHealthBar(GetComponent<HealthSystem>().health);

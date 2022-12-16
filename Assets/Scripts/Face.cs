@@ -11,6 +11,9 @@ public class Face : MonoBehaviour
     [SerializeField] Sprite[,] faceSpritesArray;
     [SerializeField] Sprite guitaristFace;
     [SerializeField] NPCBrain NPCBrainScript;
+    [SerializeField] Sprite[] zombieFace;
+    [SerializeField] EnemyBrain enemyBrainScript;
+
     public int gender;
     public float angle;
     private IEnumerator winkCoroutine;
@@ -91,6 +94,13 @@ public class Face : MonoBehaviour
             if (NPCBrainScript != null && NPCBrainScript.job == 3)
             {
                 faceSpriteRenderer.sprite = guitaristFace;
+                return;
+            }
+            if (enemyBrainScript != null)
+            {
+                if (!eyes.activeSelf) return;
+                eyes.SetActive(false);
+                faceSpriteRenderer.sprite = zombieFace[Random.Range(0,zombieFace.Length)];
                 return;
             }
             currentFaceState = value;

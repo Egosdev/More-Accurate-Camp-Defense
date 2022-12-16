@@ -125,7 +125,7 @@ public class Barricade : MonoBehaviour
             repairTimer -= Time.deltaTime;
             repairTimer = Mathf.Clamp(repairTimer, 0, repairTimer);
         }
-        if (Input.GetKeyDown(KeyCode.E) && isCloseEnoughForRepair && repairTimer == 0)
+        if (Input.GetKeyDown(KeyCode.E) && isCloseEnoughForRepair && repairTimer == 0 && CampManager.Instance.materials >= 5)
         {
             RepairWood();
             CampManager.Instance.SetMaterial(-1);
